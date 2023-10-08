@@ -1,4 +1,4 @@
-import csv  # Импортируем модуль csv для работы с CSV файлами
+import csv
 
 class Item:
     """
@@ -63,4 +63,4 @@ class Item:
         except ValueError:
             raise ValueError("Не удалось преобразовать строку в число")
 
-# Код в файле main.py остается без изменений
+
