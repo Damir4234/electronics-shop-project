@@ -1,5 +1,6 @@
 from src.item import Item
 
+
 class LanguageMixin:
     def __init__(self):
         self._language = 'EN'
@@ -13,6 +14,7 @@ class LanguageMixin:
             self._language = 'RU'
         else:
             self._language = 'EN'
+
 
 class Keyboard(Item, LanguageMixin):
     def __init__(self, name, price, quantity):
