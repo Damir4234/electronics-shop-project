@@ -16,8 +16,8 @@ class LanguageMixin:
 
 class Keyboard(Item, LanguageMixin):
     def __init__(self, name, price, quantity):
-        super().__init__(name, price, quantity)  # Call Item's constructor
-        LanguageMixin.__init__(self)  # Initialize the LanguageMixin
+        super().__init__(name, price, quantity)
+        LanguageMixin.__init__(self)
         self._name = name
 
     def __repr__(self):
