@@ -1,5 +1,12 @@
 import csv
 
+
+class InstantiateCSVError(Exception):
+    def __init__(self, message="Файл item.csv поврежден"):
+        self.message = message
+        super().__init__(self.message)
+
+
 class Item:
     """
     Класс для представления товара в магазине.
@@ -53,15 +60,27 @@ class Item:
         self.price *= self.pay_rate
 
     @classmethod
-    def instantiate_from_csv(cls, csv_file_path):
+    def instantiate_from_csv(cls, csv_file_path='items.csv'):
         cls.all.clear()
-        with open(csv_file_path, mode='r', encoding='cp1251') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                name = row['name']
-                price = float(row['price'])
-                quantity = int(row['quantity'])
-                item = cls(name, price, quantity)
+        try:
+            with open(csv_file_path, mode='r', encoding='cp1251') as file:
+                try:
+                    reader = csv.DictReader(file)
+                    required_columns = {'name', 'price', 'quantity'}
+                    if not required_columns.issubset(reader.fieldnames):
+                        raise InstantiateCSVError("Файл items.csv поврежден: отсутствует одна из колонок данных")
+                    for row in reader:
+                        try:
+                            name = row['name']
+                            price = float(row['price'])
+                            quantity = int(row['quantity'])
+                            item = cls(name, price, quantity)
+                        except KeyError:
+                            raise InstantiateCSVError("Файл items.csv поврежден: отсутствует одна из колонок данных")
+                except csv.Error:
+                    raise InstantiateCSVError("Файл items.csv поврежден: ошибка чтения CSV")
+        except FileNotFoundError:
+            raise FileNotFoundError("Отсутствует файл items.csv")
 
     @staticmethod
     def string_to_number(string):
@@ -75,5 +94,3 @@ class Item:
             return self.quantity + other.quantity
         else:
             raise ValueError("Нельзя сложить Item с экземплярами других классов.")
-
-
