@@ -1,6 +1,7 @@
-from src.item import Item
+from src.item import Item, InstantiateCSVError
 import pytest
 from src.phone import Phone
+
 
 def test_calculate_total_price():
     item = Item("Смартфон", 10000, 20)
@@ -35,3 +36,12 @@ def test_repr_magical():
     assert repr(item) == "Item('Nokia3310', 10000, 20)"
 
 
+def test_item_addition_with_wrong_type():
+    item = Item("Item 1", 10.0, 5)
+    with pytest.raises(ValueError):
+        result = item + 5
+
+
+def test_instantiate_from_csv_missing_file():
+    with pytest.raises(FileNotFoundError):
+        Item.instantiate_from_csv('non_existent_file.csv')
